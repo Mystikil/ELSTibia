@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Cyber Dragon - advanced example monster
+    Edit values below to tweak the monster's behaviour.
+-->
+<monster name="Cyber Dragon" nameDescription="a cyber dragon" race="energy" experience="12000" speed="320" raceId="990">
+    <!-- Health configuration -->
+    <health now="15000" max="15000" />
+    <!-- Visual appearance -->
+    <look type="34" addon="3" head="79" body="95" legs="95" feet="95" corpse="5973" />
+    <!-- Target switching behaviour -->
+    <targetchange interval="4000" chance="8" />
+
+    <flags>
+        <flag summonable="0" />
+        <flag attackable="1" />
+        <flag hostile="1" />
+        <flag illusionable="0" />
+        <flag convinceable="0" />
+        <flag pushable="0" />
+        <flag canpushitems="1" />
+        <flag canpushcreatures="1" />
+        <flag targetdistance="1" />
+        <flag staticattack="70" />
+        <flag runonhealth="0" />
+    </flags>
+
+    <!-- Bestiary information -->
+    <bestiary class="Dragon" prowess="90" expertise="1500" mastery="2500" charmPoints="100" difficulty="hard" occurrence="rare" locations="Futuristic Dungeons" />
+
+    <attacks>
+        <!-- Powerful melee attack -->
+        <attack name="melee" interval="2000" skill="110" attack="150" />
+        <!-- Energy breath dealing area damage -->
+        <attack name="energy" interval="3000" chance="25" range="7" radius="4" target="1" min="-300" max="-600">
+            <attribute key="shootEffect" value="energy" />
+            <attribute key="areaEffect" value="energy" />
+        </attack>
+        <!-- Fire wave in front of the dragon -->
+        <attack name="fire" interval="4000" chance="20" length="8" spread="0" min="-400" max="-700">
+            <attribute key="areaEffect" value="firearea" />
+        </attack>
+        <!-- Paralyze shot -->
+        <attack name="condition" interval="6000" chance="15" range="7" target="1" min="0" max="0">
+            <attribute key="shootEffect" value="ice" />
+            <attribute key="areaEffect" value="blueshimmer" />
+            <attribute key="condition" value="paralyze" />
+            <attribute key="conditionSpeed" value="-600" />
+            <attribute key="conditionDuration" value="4000" />
+        </attack>
+    </attacks>
+
+    <defenses armor="60" defense="60">
+        <!-- Self-healing spell -->
+        <defense name="healing" interval="5000" chance="20" min="300" max="600">
+            <attribute key="areaEffect" value="greenshimmer" />
+        </defense>
+    </defenses>
+
+    <elements>
+        <element physicalPercent="20" />
+        <element energyPercent="80" />
+        <element icePercent="-10" />
+        <element firePercent="30" />
+    </elements>
+
+    <immunities>
+        <immunity paralyze="1" />
+        <immunity invisible="1" />
+        <immunity energy="1" />
+    </immunities>
+
+    <voices interval="5000" chance="10">
+        <voice sentence="*mechanical roar*" yell="1" />
+        <voice sentence="Powering weapons." />
+    </voices>
+
+    <loot>
+        <item id="2148" name="gold coin" chance="90000" countmax="100" />
+        <item id="2152" name="platinum coin" chance="60000" countmax="5" />
+        <item id="9971" name="gold ingot" chance="5000" />
+        <item id="7591" name="great health potion" chance="7000" />
+        <item id="5954" name="demon horn" chance="1000" />
+    </loot>
+</monster>
