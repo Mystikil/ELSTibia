@@ -35,6 +35,7 @@ function onLogin(player)
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
-	player:registerEvent("BestiaryKills")
-	return true
+        player:registerEvent("BestiaryKills")
+        player:registerEvent("KillTitles")
+        return true
 end

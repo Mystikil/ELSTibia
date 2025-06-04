@@ -527,12 +527,26 @@ function Player.addBestiaryKills(self, raceId)
 end
 
 function Player.sendBestiaryMilestoneReached(self, raceId)
-	local msg = NetworkMessage()
-	msg:addByte(0xD9)
-	msg:addU16(raceId)
-	msg:sendToPlayer(self)
-	msg:delete()
-	return true
+        local msg = NetworkMessage()
+        msg:addByte(0xD9)
+        msg:addU16(raceId)
+        msg:sendToPlayer(self)
+        msg:delete()
+        return true
+end
+
+function Player.getKillTitleCount(self, raceId)
+        return math.max(0, self:getStorageValue(PlayerStorageKeys.killTitlesBase + raceId))
+end
+
+function Player.setKillTitleCount(self, raceId, value)
+        return self:setStorageValue(PlayerStorageKeys.killTitlesBase + raceId, value)
+end
+
+function Player.addKillTitleCount(self, raceId)
+        local count = self:getKillTitleCount(raceId) + 1
+        self:setKillTitleCount(raceId, count)
+        return count
 end
 
 local function getStaminaBonus(staminaMinutes)
