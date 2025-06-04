@@ -1165,4 +1165,5 @@
 	<monster name="Zugurosh" file="monsters/zugurosh.xml" />
 	<monster name="Zulazza The Corruptor" file="monsters/zulazza_the_corruptor.xml" />
 	<monster name="Zushuka" file="monsters/zushuka.xml" />
+        <monster name="Cyber Dragon" file="monsters/cyber_dragon.xml" />
 </monsters>
