@@ -1251,21 +1251,26 @@ bool Item::hasMarketAttributes() const
 	}
 
 	// discard items with other modified attributes
-	for (const auto& attr : attributes->getList()) {
-		if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-			uint16_t charges = static_cast<uint16_t>(attr.value.integer);
-			if (charges != items[id].charges) {
-				return false;
-			}
-		} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-			uint32_t duration = static_cast<uint32_t>(attr.value.integer);
-			if (duration <= getDefaultDurationMin()) {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
+        for (const auto& attr : attributes->getList()) {
+                if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
+                        uint16_t charges = static_cast<uint16_t>(attr.value.integer);
+                        if (charges != items[id].charges) {
+                                return false;
+                        }
+                } else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
+                        uint32_t duration = static_cast<uint32_t>(attr.value.integer);
+                        if (duration <= getDefaultDurationMin()) {
+                                return false;
+                        }
+                } else if (attr.type == ITEM_ATTRIBUTE_CUSTOM) {
+                        const ItemAttributes::CustomAttributeMap* customMap = attr.value.custom;
+                        if (!customMap || customMap->size() != 1 || customMap->find("serial") == customMap->end()) {
+                                return false;
+                        }
+                } else {
+                        return false;
+                }
+        }
 	return true;
 }
 
