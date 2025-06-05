@@ -41,6 +41,9 @@ PlayerStorageKeys = {
 	achievementsCounter = 20000,
 	achievementsBase = 300000,
 
-	-- Bestiary:
-	bestiaryKillsBase = 400000,
+        -- Bestiary:
+        bestiaryKillsBase = 400000,
+
+        -- Kill Titles:
+        killTitlesBase = 500000,
 }

@@ -34,10 +34,11 @@ function creatureEvent.onKill(player, target)
 		return true
 	end
 
-	for _, killer in pairs(getKillersForBestiary(monster)) do
-		killer:addBestiaryKills(raceId)
-	end
-	return true
+       for _, killer in pairs(getKillersForBestiary(monster)) do
+               killer:addBestiaryKills(raceId)
+               killer:checkKillTitle(raceId, monster:getName())
+       end
+       return true
 end
 
 creatureEvent:register()

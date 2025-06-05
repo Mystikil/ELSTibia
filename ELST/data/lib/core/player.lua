@@ -527,12 +527,23 @@ function Player.addBestiaryKills(self, raceId)
 end
 
 function Player.sendBestiaryMilestoneReached(self, raceId)
-	local msg = NetworkMessage()
-	msg:addByte(0xD9)
-	msg:addU16(raceId)
-	msg:sendToPlayer(self)
-	msg:delete()
-	return true
+        local msg = NetworkMessage()
+        msg:addByte(0xD9)
+        msg:addU16(raceId)
+        msg:sendToPlayer(self)
+        msg:delete()
+        return true
+end
+
+function Player.checkKillTitle(self, raceId, monsterName)
+        if self:getBestiaryKills(raceId) >= 100 then
+                local storage = PlayerStorageKeys.killTitlesBase + raceId
+                if self:getStorageValue(storage) ~= 1 then
+                        self:setStorageValue(storage, 1)
+                        self:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("You earned the title \"Slayer of 100 %s\".", monsterName .. 's'))
+                end
+        end
+        return true
 end
 
 local function getStaminaBonus(staminaMinutes)
