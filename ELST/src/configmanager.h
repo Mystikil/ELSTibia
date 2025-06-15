@@ -44,11 +44,12 @@ enum boolean_config_t
 	ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
 	REMOVE_ON_DESPAWN,
 	TWO_FACTOR_AUTH,
-	MANASHIELD_BREAKABLE,
-	CHECK_DUPLICATE_STORAGE_KEYS,
-	MONSTER_OVERSPAWN,
+        MANASHIELD_BREAKABLE,
+        CHECK_DUPLICATE_STORAGE_KEYS,
+        MONSTER_OVERSPAWN,
+        DYNAMIC_DIFFICULTY_ENABLED,
 
-	LAST_BOOLEAN_CONFIG /* this must be the last one */
+        LAST_BOOLEAN_CONFIG /* this must be the last one */
 };
 
 enum string_config_t
@@ -135,6 +136,7 @@ const std::string& getString(string_config_t what);
 int32_t getNumber(integer_config_t what);
 bool getBoolean(boolean_config_t what);
 float getExperienceStage(uint32_t level);
+float getDifficultyMultiplier(uint32_t onlinePlayers);
 
 bool setString(string_config_t what, std::string_view value);
 bool setNumber(integer_config_t what, int32_t value);

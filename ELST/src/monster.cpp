@@ -34,9 +34,14 @@ Monster::Monster(MonsterType* mType) : Creature(), nameDescription(mType->nameDe
 	defaultOutfit = mType->info.outfit;
 	currentOutfit = mType->info.outfit;
 	skull = mType->info.skull;
-	health = mType->info.health;
-	healthMax = mType->info.healthMax;
-	baseSpeed = mType->info.baseSpeed;
+        health = mType->info.health;
+        healthMax = mType->info.healthMax;
+        if (ConfigManager::getBoolean(ConfigManager::DYNAMIC_DIFFICULTY_ENABLED)) {
+                difficultyFactor = ConfigManager::getDifficultyMultiplier(g_game.getPlayersOnline());
+                health = static_cast<int32_t>(health * difficultyFactor);
+                healthMax = static_cast<int32_t>(healthMax * difficultyFactor);
+        }
+        baseSpeed = mType->info.baseSpeed;
 	internalLight = mType->info.light;
 	hiddenHealth = mType->info.hiddenHealth;
 
@@ -847,8 +852,8 @@ void Monster::doAttacking(uint32_t interval)
 					lookUpdated = true;
 				}
 
-				minCombatValue = spellBlock.minCombatValue;
-				maxCombatValue = spellBlock.maxCombatValue;
+                                minCombatValue = static_cast<int32_t>(spellBlock.minCombatValue * difficultyFactor);
+                                maxCombatValue = static_cast<int32_t>(spellBlock.maxCombatValue * difficultyFactor);
 				spellBlock.spell->castSpell(this, attackedCreature);
 
 				if (spellBlock.isMelee) {
@@ -982,8 +987,8 @@ void Monster::onThinkDefense(uint32_t interval)
 		}
 
 		if ((spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100)))) {
-			minCombatValue = spellBlock.minCombatValue;
-			maxCombatValue = spellBlock.maxCombatValue;
+                        minCombatValue = static_cast<int32_t>(spellBlock.minCombatValue * difficultyFactor);
+                        maxCombatValue = static_cast<int32_t>(spellBlock.maxCombatValue * difficultyFactor);
 			spellBlock.spell->castSpell(this, this);
 		}
 	}
