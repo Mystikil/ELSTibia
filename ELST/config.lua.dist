@@ -20,6 +20,14 @@ expFromPlayersLevelRange = 75
 weaponEvolutionUses = 100
 weaponEvolutionAttackGain = 3
 
+-- Dynamic Difficulty
+dynamicDifficultyEnabled = false
+difficultyScalingCurve = {
+    { players = 1, multiplier = 1 },
+    { players = 25, multiplier = 1.2 },
+    { players = 50, multiplier = 1.5 }
+}
+
 -- Connection Config
 -- NOTE: maxPlayers set to 0 means no limit
 -- NOTE: allowWalkthrough is only applicable to players

@@ -165,7 +165,8 @@ private:
 	bool isIdle = true;
 	bool isMasterInRange = false;
 	bool randomStepping = false;
-	bool walkingToSpawn = false;
+        bool walkingToSpawn = false;
+        float difficultyFactor = 1.0f;
 
 	void onCreatureEnter(Creature* creature);
 	void onCreatureLeave(Creature* creature);
