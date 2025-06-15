@@ -12,3 +12,13 @@ It demonstrates an advanced monster configuration with detailed comments so you 
 * **Defenses**: Strong armor, healing ability, partial immunities.
 
 Edit the XML file to adjust these values. Each major block is commented to explain its purpose.
+
+## Interactions
+
+Monsters support an optional `<interactions>` block. For instance, to allow a monster to open doors you can add:
+
+```xml
+<interactions>
+    <interaction type="openDoor"/>
+</interactions>
+```

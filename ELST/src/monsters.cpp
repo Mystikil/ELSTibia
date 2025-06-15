@@ -1459,23 +1459,37 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		}
 	}
 
-	if ((node = monsterNode.child("script"))) {
-		for (auto eventNode : node.children()) {
-			if ((attr = eventNode.attribute("name"))) {
-				mType->info.scripts.emplace_back(attr.as_string());
-			} else {
-				std::cout << "[Warning - Monsters::loadMonster] Missing name for script event. " << file << std::endl;
-			}
-		}
-	}
+        if ((node = monsterNode.child("script"))) {
+                for (auto eventNode : node.children()) {
+                        if ((attr = eventNode.attribute("name"))) {
+                                mType->info.scripts.emplace_back(attr.as_string());
+                        } else {
+                                std::cout << "[Warning - Monsters::loadMonster] Missing name for script event. " << file << std::endl;
+                        }
+                }
+        }
+
+       if ((node = monsterNode.child("interactions"))) {
+               for (auto intNode : node.children()) {
+                       if ((attr = intNode.attribute("type"))) {
+                               std::string type = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
+                               if (type == "opendoor") {
+                                       mType->info.interactions.push_back(MonsterInteractionType::OPEN_DOOR);
+                               } else {
+                                       std::cout << "[Warning - Monsters::loadMonster] Unknown interaction type: " << attr.as_string() << ' ' << file << std::endl;
+                               }
+                       }
+               }
+       }
 
 	mType->info.summons.shrink_to_fit();
 	mType->info.lootItems.shrink_to_fit();
 	mType->info.attackSpells.shrink_to_fit();
 	mType->info.defenseSpells.shrink_to_fit();
-	mType->info.voiceVector.shrink_to_fit();
-	mType->info.scripts.shrink_to_fit();
-	return mType;
+       mType->info.voiceVector.shrink_to_fit();
+       mType->info.scripts.shrink_to_fit();
+       mType->info.interactions.shrink_to_fit();
+       return mType;
 }
 
 bool MonsterType::loadCallback(LuaScriptInterface* scriptInterface)

@@ -78,8 +78,10 @@ public:
 	bool isHostile() const { return mType->info.isHostile; }
 	bool canSee(const Position& pos) const override;
 	bool canSeeInvisibility() const override { return isImmune(CONDITION_INVISIBLE); }
-	uint32_t getManaCost() const { return mType->info.manaCost; }
-	void setSpawn(Spawn* spawn) { this->spawn = spawn; }
+        uint32_t getManaCost() const { return mType->info.manaCost; }
+       MonsterType* getMonsterType() { return mType; }
+       const MonsterType* getMonsterType() const { return mType; }
+       void setSpawn(Spawn* spawn) { this->spawn = spawn; }
 	bool canWalkOnFieldType(CombatType_t combatType) const;
 
 	void onAttackedCreatureDisappear(bool isLogout) override;
