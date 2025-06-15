@@ -128,7 +128,8 @@ class MonsterType
 
 		Skulls_t skull = SKULL_NONE;
 		Outfit_t outfit = {};
-		RaceType_t race = RACE_BLOOD;
+                RaceType_t race = RACE_BLOOD;
+                BiomeType_t biome = BIOME_NONE;
 
 		LightInfo light = {};
 		uint16_t lookcorpse = 0;

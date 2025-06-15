@@ -179,13 +179,23 @@ enum AccountType_t : uint8_t
 
 enum RaceType_t : uint8_t
 {
-	RACE_NONE,
-	RACE_VENOM,
-	RACE_BLOOD,
-	RACE_UNDEAD,
-	RACE_FIRE,
-	RACE_ENERGY,
-	RACE_INK,
+        RACE_NONE,
+        RACE_VENOM,
+        RACE_BLOOD,
+        RACE_UNDEAD,
+        RACE_FIRE,
+        RACE_ENERGY,
+        RACE_INK,
+};
+
+enum BiomeType_t : uint8_t
+{
+        BIOME_NONE,
+        BIOME_FIRE,
+        BIOME_WATER,
+        BIOME_EARTH,
+        BIOME_ENERGY,
+        BIOME_ICE,
 };
 
 enum CombatType_t : uint16_t
