@@ -292,6 +292,8 @@ private:
 
 	static int luaGameGetWorldType(lua_State* L);
 	static int luaGameSetWorldType(lua_State* L);
+	static int luaGameIsAIDebugEnabled(lua_State* L);
+	static int luaGameSetAIDebug(lua_State* L);
 
 	static int luaGameGetItemAttributeByName(lua_State* L);
 	static int luaGameGetReturnMessage(lua_State* L);
