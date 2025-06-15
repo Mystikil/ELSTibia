@@ -4,6 +4,7 @@
 #include "otpch.h"
 
 #include "monster.h"
+#include "monster_ai.h"
 
 #include "condition.h"
 #include "configmanager.h"
@@ -38,7 +39,11 @@ Monster::Monster(MonsterType* mType) : Creature(), nameDescription(mType->nameDe
 	healthMax = mType->info.healthMax;
 	baseSpeed = mType->info.baseSpeed;
 	internalLight = mType->info.light;
-	hiddenHealth = mType->info.hiddenHealth;
+       hiddenHealth = mType->info.hiddenHealth;
+       aiController = std::make_unique<MonsterAIController>(this);
+       if (!mType->info.aiProfile.empty()) {
+               aiController->loadProfile("data/ai/" + mType->info.aiProfile);
+       }
 
 	// register creature events
 	for (const std::string& scriptName : mType->info.scripts) {
@@ -50,8 +55,9 @@ Monster::Monster(MonsterType* mType) : Creature(), nameDescription(mType->nameDe
 
 Monster::~Monster()
 {
-	clearTargetList();
-	clearFriendList();
+       clearTargetList();
+       clearFriendList();
+       aiController.reset();
 }
 
 void Monster::addList() { g_game.addMonster(this); }
@@ -740,84 +746,7 @@ void Monster::onEndCondition(ConditionType_t type)
 
 void Monster::onThink(uint32_t interval)
 {
-	Creature::onThink(interval);
-
-	if (mType->info.thinkEvent != -1) {
-		// onThink(self, interval)
-		if (!tfs::lua::reserveScriptEnv()) {
-			std::cout << "[Error - Monster::onThink] Call stack overflow" << std::endl;
-			return;
-		}
-
-		LuaScriptInterface* scriptInterface = mType->info.scriptInterface;
-		ScriptEnvironment* env = tfs::lua::getScriptEnv();
-		env->setScriptId(mType->info.thinkEvent, scriptInterface);
-
-		lua_State* L = scriptInterface->getLuaState();
-		scriptInterface->pushFunction(mType->info.thinkEvent);
-
-		tfs::lua::pushUserdata(L, this);
-		tfs::lua::setMetatable(L, -1, "Monster");
-
-		lua_pushnumber(L, interval);
-
-		if (scriptInterface->callFunction(2)) {
-			return;
-		}
-	}
-
-	if (!isInSpawnRange(position)) {
-		if (getBoolean(ConfigManager::MONSTER_OVERSPAWN)) {
-			if (spawn) {
-				spawn->removeMonster(this);
-				spawn->startSpawnCheck();
-				spawn = nullptr;
-			}
-		} else {
-			g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
-			if (getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
-				g_game.removeCreature(this, false);
-			} else {
-				g_game.internalTeleport(this, masterPos);
-				setIdle(true);
-			}
-		}
-	} else {
-		updateIdleStatus();
-
-		if (!isIdle) {
-			addEventWalk();
-
-			if (isSummon()) {
-				if (!attackedCreature) {
-					if (getMaster() && getMaster()->getAttackedCreature()) {
-						// This happens if the monster is summoned during combat
-						selectTarget(getMaster()->getAttackedCreature());
-					} else if (getMaster() != followCreature) {
-						// Our master has not ordered us to attack anything, lets follow him around instead.
-						setFollowCreature(getMaster());
-					}
-				} else if (attackedCreature == this) {
-					removeFollowCreature();
-				} else if (followCreature != attackedCreature) {
-					// This happens just after a master orders an attack, so lets follow it as well.
-					setFollowCreature(attackedCreature);
-				}
-			} else if (!targetList.empty()) {
-				if (!followCreature || !hasFollowPath) {
-					searchTarget();
-				} else if (isFleeing()) {
-					if (attackedCreature && !canUseAttack(getPosition(), attackedCreature)) {
-						searchTarget(TARGETSEARCH_ATTACKRANGE);
-					}
-				}
-			}
-
-			onThinkTarget(interval);
-			onThinkYell(interval);
-			onThinkDefense(interval);
-		}
-	}
+       aiController->onThink(interval);
 }
 
 void Monster::doAttacking(uint32_t interval)

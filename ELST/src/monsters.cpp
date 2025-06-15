@@ -988,7 +988,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		}
 	}
 
-	if ((node = monsterNode.child("bestiary"))) {
+        if ((node = monsterNode.child("bestiary"))) {
 		if ((attr = node.attribute("class"))) {
 			mType->bestiaryInfo.className = attr.as_string();
 		}
@@ -1034,10 +1034,46 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			mType->bestiaryInfo = {};
 			std::cout << "[Warning - Monsters::loadMonster] invalid bestiary info for " << mType->name << "."
 			          << std::endl;
-		} else {
-			addBestiaryMonsterType(mType);
-		}
-	}
+                } else {
+                        addBestiaryMonsterType(mType);
+                }
+        }
+
+        if ((node = monsterNode.child("behaviors"))) {
+                if ((attr = node.attribute("tree"))) {
+                        mType->info.behaviors.treeFile = attr.as_string();
+                }
+                if ((attr = node.attribute("fsm"))) {
+                        mType->info.behaviors.fsmFile = attr.as_string();
+                }
+        }
+
+        if ((node = monsterNode.child("perception"))) {
+                if ((attr = node.attribute("sight"))) {
+                        mType->info.perception.sightRange = pugi::cast<uint32_t>(attr.value());
+                }
+        }
+
+        if ((node = monsterNode.child("threat"))) {
+                if ((attr = node.attribute("memory"))) {
+                        mType->info.threat.memory = pugi::cast<uint32_t>(attr.value());
+                }
+        }
+
+        if ((node = monsterNode.child("skills"))) {
+                if ((attr = node.attribute("accuracy"))) {
+                        mType->info.skills.accuracy = pugi::cast<int32_t>(attr.value());
+                }
+                if ((attr = node.attribute("evasion"))) {
+                        mType->info.skills.evasion = pugi::cast<int32_t>(attr.value());
+                }
+        }
+
+        if ((node = monsterNode.child("ai"))) {
+                if ((attr = node.attribute("profile"))) {
+                        mType->info.aiProfile = attr.as_string();
+                }
+        }
 
 	if (mType->info.manaCost == 0 && (mType->info.isSummonable || mType->info.isConvinceable)) {
 		std::cout

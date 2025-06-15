@@ -4,6 +4,11 @@
     Edit values below to tweak the monster's behaviour.
 -->
 <monster name="Cyber Dragon" nameDescription="a cyber dragon" race="energy" experience="12000" speed="320" raceId="990">
+    <ai profile="boss_control_and_strike.bt.json"/>
+    <behaviors tree="boss_control_and_strike.bt.json" />
+    <perception sight="7" />
+    <threat memory="2000" />
+    <skills accuracy="75" evasion="20" />
     <!-- Health configuration -->
     <health now="15000" max="15000" />
     <!-- Visual appearance -->
