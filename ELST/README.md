@@ -12,6 +12,7 @@ Basic Python scripting is available when Python development libraries are presen
 * [Compiling](https://github.com/otland/forgottenserver/wiki/Compiling), alternatively download [releases](https://github.com/otland/forgottenserver/releases)
 * [Scripting Reference](https://github.com/otland/forgottenserver/wiki/Script-Interface)
 * [Contributing](https://github.com/otland/forgottenserver/wiki/Contributing)
+* [Monster AI System](docs/monster_ai_system.md)
 
 ### Support
 
