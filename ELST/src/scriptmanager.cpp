@@ -14,6 +14,9 @@
 #include "spells.h"
 #include "talkaction.h"
 #include "weapons.h"
+#ifdef ENABLE_PYTHON
+#include "pythonscript.h"
+#endif
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
@@ -95,10 +98,14 @@ bool ScriptingManager::loadScriptSystems()
 		return false;
 	}
 
-	if (!tfs::events::load()) {
-		std::cout << "> ERROR: Unable to load events!" << std::endl;
-		return false;
-	}
+       if (!tfs::events::load()) {
+               std::cout << "> ERROR: Unable to load events!" << std::endl;
+               return false;
+       }
 
-	return true;
+#ifdef ENABLE_PYTHON
+       g_pythonEnvironment.loadFile("example.py");
+#endif
+
+       return true;
 }

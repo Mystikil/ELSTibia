@@ -4610,14 +4610,15 @@ int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 {
 	// Game.loadMap(path)
 	const std::string& path = tfs::lua::getString(L, 1);
-	g_dispatcher.addTask([path]() {
-		try {
-			g_game.loadMap(path, true);
-		} catch (const std::exception& e) {
-			// FIXME: Should only catch some exceptions
-			std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Failed to load map: " << e.what() << '\n';
-		}
-	});
+       g_dispatcher.addTask([path]() {
+               try {
+                       g_game.loadMap(path, true);
+               } catch (const std::runtime_error& e) {
+                       std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Failed to load map: " << e.what() << '\n';
+               } catch (const std::exception& e) {
+                       std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Unexpected error: " << e.what() << '\n';
+               }
+       });
 	return 0;
 }
 

@@ -5126,14 +5126,12 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 		return;
 	}
 
-	// TODO: move debug assertions to database
-	FILE* file = fopen("client_assertions.txt", "a");
-	if (file) {
-		fprintf(file, "----- %s - %s (%s) -----\n", formatDate(time(nullptr)).c_str(), player->getName().c_str(),
-		        player->getIP().to_string().c_str());
-		fprintf(file, "%s\n%s\n%s\n%s\n", assertLine.c_str(), date.c_str(), description.c_str(), comment.c_str());
-		fclose(file);
-	}
+       Database& db = Database::getInstance();
+       const std::string query = fmt::format(
+               "INSERT INTO `client_assertions` (`player_id`, `created_at`, `assert_line`, `assert_date`, `description`, `comment`) VALUES ({:d}, {:d}, {:s}, {:s}, {:s}, {:s})",
+               playerId, time(nullptr), db.escapeString(assertLine), db.escapeString(date), db.escapeString(description), db.escapeString(comment));
+
+       g_databaseTasks.addTask(query);
 }
 
 void Game::playerLeaveMarket(uint32_t playerId)
