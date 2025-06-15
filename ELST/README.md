@@ -9,6 +9,11 @@ The Forgotten Server is a free and open-source MMORPG server emulator written in
 * [Scripting Reference](https://github.com/otland/forgottenserver/wiki/Script-Interface)
 * [Contributing](https://github.com/otland/forgottenserver/wiki/Contributing)
 
+### Weapon Evolution
+
+Weapons now track how often they are used. Once a weapon reaches 100 uses it
+automatically gains a permanent +3 attack bonus and is marked as evolved.
+
 ### Support
 
 If you need help, please visit the [support forum on OTLand](https://otland.net/forums/support.16/). Our issue tracker is not a support forum, and using it as one will result in your issue being closed. If you were unable to get assistance in the support forum, you should consider [becoming a premium user on OTLand](https://otland.net/account/upgrades) which grants you access to the premium support forum and supports OTLand financially.
