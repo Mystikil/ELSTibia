@@ -175,6 +175,7 @@
 	<action itemid="7552" script="others/large_seashell.lua" />
 	<action fromid="7904" toid="7907" script="others/bed_modification_kits.lua" />
 	<action fromid="18488" toid="18492" script="others/skill_trainer.lua" />
-	<action itemid="20252" script="others/bed_modification_kits.lua" />
-	<action fromid="22845" toid="22846" script="others/teleport.lua" />
+        <action itemid="20252" script="others/bed_modification_kits.lua" />
+        <action fromid="3689" toid="3696" script="others/potion_mixer.lua" />
+        <action fromid="22845" toid="22846" script="others/teleport.lua" />
 </actions>
