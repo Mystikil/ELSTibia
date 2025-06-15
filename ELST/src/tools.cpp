@@ -315,6 +315,7 @@ using CombatTypeNames = std::unordered_map<CombatType_t, std::string, std::hash<
 using AmmoTypeNames = std::unordered_map<std::string, Ammo_t>;
 using WeaponActionNames = std::unordered_map<std::string, WeaponAction_t>;
 using SkullNames = std::unordered_map<std::string, Skulls_t>;
+using BiomeNames = std::unordered_map<std::string, BiomeType_t>;
 
 MagicEffectNames magicEffectNames = {
     {"redspark", CONST_ME_DRAWBLOOD},
@@ -573,6 +574,15 @@ SkullNames skullNames = {
     {"red", SKULL_RED},   {"black", SKULL_BLACK},   {"orange", SKULL_ORANGE},
 };
 
+BiomeNames biomeNames = {
+    {"none", BIOME_NONE},
+    {"fire", BIOME_FIRE},
+    {"water", BIOME_WATER},
+    {"earth", BIOME_EARTH},
+    {"energy", BIOME_ENERGY},
+    {"ice", BIOME_ICE},
+};
+
 std::vector<uint16_t> depotBoxes = {
     ITEM_DEPOT_BOX_I,   ITEM_DEPOT_BOX_II,   ITEM_DEPOT_BOX_III,   ITEM_DEPOT_BOX_IV,  ITEM_DEPOT_BOX_V,
     ITEM_DEPOT_BOX_VI,  ITEM_DEPOT_BOX_VII,  ITEM_DEPOT_BOX_VIII,  ITEM_DEPOT_BOX_IX,  ITEM_DEPOT_BOX_X,
@@ -635,11 +645,20 @@ WeaponAction_t getWeaponAction(const std::string& strValue)
 
 Skulls_t getSkullType(const std::string& strValue)
 {
-	auto skullType = skullNames.find(strValue);
-	if (skullType != skullNames.end()) {
-		return skullType->second;
-	}
-	return SKULL_NONE;
+        auto skullType = skullNames.find(strValue);
+        if (skullType != skullNames.end()) {
+                return skullType->second;
+        }
+        return SKULL_NONE;
+}
+
+BiomeType_t getBiomeType(const std::string& strValue)
+{
+        auto biome = biomeNames.find(strValue);
+        if (biome != biomeNames.end()) {
+                return biome->second;
+        }
+        return BIOME_NONE;
 }
 
 std::string getSpecialSkillName(uint8_t skillid)

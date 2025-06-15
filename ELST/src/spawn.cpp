@@ -11,6 +11,7 @@
 #include "monster.h"
 #include "npc.h"
 #include "pugicast.h"
+#include "tools.h"
 #include "scheduler.h"
 #include "spectators.h"
 
@@ -56,8 +57,13 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 			continue;
 		}
 
-		spawnList.emplace_front(centerPos, radius);
-		Spawn& spawn = spawnList.front();
+                BiomeType_t spawnBiome = BIOME_NONE;
+                if (auto biomeAttr = spawnNode.attribute("biome")) {
+                        spawnBiome = getBiomeType(boost::algorithm::to_lower_copy<std::string>(biomeAttr.as_string()));
+                }
+
+                spawnList.emplace_front(centerPos, radius, spawnBiome);
+                Spawn& spawn = spawnList.front();
 
 		for (auto childNode : spawnNode.children()) {
 			if (caseInsensitiveEqual(childNode.name(), "monsters")) {
@@ -312,10 +318,14 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup /* = fa
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir,
                          bool startup /*= false*/)
 {
-	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
-	if (!tfs::events::monster::onSpawn(monster_ptr.get(), pos, startup, false)) {
-		return false;
-	}
+        if (biome != BIOME_NONE && mType->info.biome != BIOME_NONE && biome != mType->info.biome) {
+                return false;
+        }
+
+        std::unique_ptr<Monster> monster_ptr(new Monster(mType));
+        if (!tfs::events::monster::onSpawn(monster_ptr.get(), pos, startup, false)) {
+                return false;
+        }
 
 	if (startup) {
 		// No need to send out events to the surrounding since there is no one out there to listen!

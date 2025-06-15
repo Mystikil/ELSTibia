@@ -834,26 +834,30 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		mType->nameDescription = "a " + boost::algorithm::to_lower_copy(mType->name);
 	}
 
-	if ((attr = monsterNode.attribute("race"))) {
-		std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
-		uint16_t tmpInt = pugi::cast<uint16_t>(attr.value());
-		if (tmpStrValue == "venom" || tmpInt == 1) {
-			mType->info.race = RACE_VENOM;
-		} else if (tmpStrValue == "blood" || tmpInt == 2) {
-			mType->info.race = RACE_BLOOD;
-		} else if (tmpStrValue == "undead" || tmpInt == 3) {
-			mType->info.race = RACE_UNDEAD;
-		} else if (tmpStrValue == "fire" || tmpInt == 4) {
-			mType->info.race = RACE_FIRE;
-		} else if (tmpStrValue == "energy" || tmpInt == 5) {
-			mType->info.race = RACE_ENERGY;
-		} else if (tmpStrValue == "ink" || tmpInt == 6) {
-			mType->info.race = RACE_INK;
-		} else {
-			std::cout << "[Warning - Monsters::loadMonster] Unknown race type " << attr.as_string() << ". " << file
-			          << std::endl;
-		}
-	}
+        if ((attr = monsterNode.attribute("race"))) {
+                std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
+                uint16_t tmpInt = pugi::cast<uint16_t>(attr.value());
+                if (tmpStrValue == "venom" || tmpInt == 1) {
+                        mType->info.race = RACE_VENOM;
+                } else if (tmpStrValue == "blood" || tmpInt == 2) {
+                        mType->info.race = RACE_BLOOD;
+                } else if (tmpStrValue == "undead" || tmpInt == 3) {
+                        mType->info.race = RACE_UNDEAD;
+                } else if (tmpStrValue == "fire" || tmpInt == 4) {
+                        mType->info.race = RACE_FIRE;
+                } else if (tmpStrValue == "energy" || tmpInt == 5) {
+                        mType->info.race = RACE_ENERGY;
+                } else if (tmpStrValue == "ink" || tmpInt == 6) {
+                        mType->info.race = RACE_INK;
+                } else {
+                        std::cout << "[Warning - Monsters::loadMonster] Unknown race type " << attr.as_string() << ". " << file
+                                  << std::endl;
+                }
+        }
+
+        if ((attr = monsterNode.attribute("element"))) {
+                mType->info.biome = getBiomeType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
+        }
 
 	if ((attr = monsterNode.attribute("experience"))) {
 		mType->info.experience = pugi::cast<uint64_t>(attr.value());

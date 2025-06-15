@@ -5,6 +5,7 @@
 #define FS_SPAWN_H
 
 #include "position.h"
+#include "enums.h"
 
 class Monster;
 class MonsterType;
@@ -22,7 +23,10 @@ struct spawnBlock_t
 class Spawn
 {
 public:
-	Spawn(Position pos, int32_t radius) : centerPos(std::move(pos)), radius(radius) {}
+        Spawn(Position pos, int32_t radius, BiomeType_t biome = BIOME_NONE)
+            : centerPos(std::move(pos)), radius(radius), biome(biome)
+        {
+        }
 	~Spawn();
 
 	// non-copyable
@@ -50,8 +54,9 @@ private:
 	// map of creatures in the spawn
 	std::map<uint32_t, spawnBlock_t> spawnMap;
 
-	Position centerPos;
-	int32_t radius;
+        Position centerPos;
+        int32_t radius;
+        BiomeType_t biome = BIOME_NONE;
 
 	uint32_t interval = 60000;
 	uint32_t checkSpawnEvent = 0;
