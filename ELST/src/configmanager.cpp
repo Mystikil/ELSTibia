@@ -291,9 +291,11 @@ bool ConfigManager::load()
 	integer[QUEST_TRACKER_FREE_LIMIT] = getGlobalNumber(L, "questTrackerFreeLimit", 10);
 	integer[QUEST_TRACKER_PREMIUM_LIMIT] = getGlobalNumber(L, "questTrackerPremiumLimit", 15);
 	integer[STAMINA_REGEN_MINUTE] = getGlobalNumber(L, "timeToRegenMinuteStamina", 3 * 60);
-	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 6 * 60);
-	integer[PATHFINDING_INTERVAL] = getGlobalNumber(L, "pathfindingInterval", 200);
-	integer[PATHFINDING_DELAY] = getGlobalNumber(L, "pathfindingDelay", 300);
+        integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 6 * 60);
+        integer[PATHFINDING_INTERVAL] = getGlobalNumber(L, "pathfindingInterval", 200);
+        integer[PATHFINDING_DELAY] = getGlobalNumber(L, "pathfindingDelay", 300);
+       integer[WEAPON_EVOLUTION_USES] = getGlobalNumber(L, "weaponEvolutionUses", 100);
+       integer[WEAPON_EVOLUTION_ATTACK_GAIN] = getGlobalNumber(L, "weaponEvolutionAttackGain", 3);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {

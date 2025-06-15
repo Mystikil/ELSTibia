@@ -457,12 +457,12 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
                 evolved = attr->get<bool>();
         }
 
-        if (!evolved && useCount >= 100) {
-                item->setIntAttr(ITEM_ATTRIBUTE_ATTACK, item->getAttack() + 3);
-                item->setCustomAttribute("evolved", true);
-                player->sendTextMessage(MESSAGE_INFO_DESCR,
-                                        fmt::format("Your {:s} has evolved and gained +3 attack!", item->getName()));
-        }
+       if (!evolved && useCount >= getNumber(ConfigManager::WEAPON_EVOLUTION_USES)) {
+               item->setIntAttr(ITEM_ATTRIBUTE_ATTACK, item->getAttack() + getNumber(ConfigManager::WEAPON_EVOLUTION_ATTACK_GAIN));
+               item->setCustomAttribute("evolved", true);
+               player->sendTextMessage(MESSAGE_INFO_DESCR,
+                                       fmt::format("Your {:s} has evolved and gained +%d attack!", item->getName(), getNumber(ConfigManager::WEAPON_EVOLUTION_ATTACK_GAIN)));
+       }
 
 	if (breakChance != 0 && uniform_random(1, 100) <= breakChance) {
 		player->sendSupplyUsed(item->getClientID());
