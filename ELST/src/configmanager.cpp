@@ -31,6 +31,8 @@ std::array<bool, ConfigManager::LAST_BOOLEAN_CONFIG> boolean = {};
 
 using ExperienceStages = std::vector<std::tuple<uint32_t, uint32_t, float>>;
 ExperienceStages expStages;
+using DifficultyCurve = std::vector<std::tuple<uint32_t, float>>;
+DifficultyCurve difficultyCurve;
 
 bool loaded = false;
 
@@ -112,6 +114,29 @@ ExperienceStages loadLuaStages(lua_State* L)
 
 	std::sort(stages.begin(), stages.end());
 	return stages;
+}
+
+DifficultyCurve loadLuaDifficultyCurve(lua_State* L)
+{
+        DifficultyCurve curve;
+
+        lua_getglobal(L, "difficultyScalingCurve");
+        if (!lua_istable(L, -1)) {
+                return {};
+        }
+
+        lua_pushnil(L);
+        while (lua_next(L, -2) != 0) {
+                const auto tableIndex = lua_gettop(L);
+                auto players = tfs::lua::getField<uint32_t>(L, tableIndex, "players", 1);
+                auto multiplier = tfs::lua::getField<float>(L, tableIndex, "multiplier", 1);
+                curve.emplace_back(players, multiplier);
+                lua_pop(L, 4);
+        }
+        lua_pop(L, 1);
+
+        std::sort(curve.begin(), curve.end());
+        return curve;
 }
 
 ExperienceStages loadXMLStages()
@@ -243,8 +268,9 @@ bool ConfigManager::load()
 	boolean[REMOVE_ON_DESPAWN] = getGlobalBoolean(L, "removeOnDespawn", true);
 	boolean[MANASHIELD_BREAKABLE] = getGlobalBoolean(L, "useBreakableManaShield", true);
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
-	boolean[CHECK_DUPLICATE_STORAGE_KEYS] = getGlobalBoolean(L, "checkDuplicateStorageKeys", false);
-	boolean[MONSTER_OVERSPAWN] = getGlobalBoolean(L, "monsterOverspawn", false);
+        boolean[CHECK_DUPLICATE_STORAGE_KEYS] = getGlobalBoolean(L, "checkDuplicateStorageKeys", false);
+        boolean[MONSTER_OVERSPAWN] = getGlobalBoolean(L, "monsterOverspawn", false);
+        boolean[DYNAMIC_DIFFICULTY_ENABLED] = getGlobalBoolean(L, "dynamicDifficultyEnabled", false);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
@@ -293,9 +319,11 @@ bool ConfigManager::load()
 	integer[STAMINA_REGEN_MINUTE] = getGlobalNumber(L, "timeToRegenMinuteStamina", 3 * 60);
         integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 6 * 60);
         integer[PATHFINDING_INTERVAL] = getGlobalNumber(L, "pathfindingInterval", 200);
-        integer[PATHFINDING_DELAY] = getGlobalNumber(L, "pathfindingDelay", 300);
+       integer[PATHFINDING_DELAY] = getGlobalNumber(L, "pathfindingDelay", 300);
        integer[WEAPON_EVOLUTION_USES] = getGlobalNumber(L, "weaponEvolutionUses", 100);
        integer[WEAPON_EVOLUTION_ATTACK_GAIN] = getGlobalNumber(L, "weaponEvolutionAttackGain", 3);
+
+        difficultyCurve = loadLuaDifficultyCurve(L);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {
@@ -352,7 +380,21 @@ float ConfigManager::getExperienceStage(uint32_t level)
 		return getNumber(ConfigManager::RATE_EXPERIENCE);
 	}
 
-	return std::get<2>(*it);
+        return std::get<2>(*it);
+}
+
+float ConfigManager::getDifficultyMultiplier(uint32_t playersOnline)
+{
+        float multiplier = 1;
+        for (const auto& stage : difficultyCurve) {
+                auto&& [players, factor] = stage;
+                if (playersOnline >= players) {
+                        multiplier = factor;
+                } else {
+                        break;
+                }
+        }
+        return multiplier;
 }
 
 bool ConfigManager::setString(string_config_t what, std::string_view value)
