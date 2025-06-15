@@ -10,6 +10,8 @@ removeChargesFromRunes = true
 removeChargesFromPotions = true
 removeWeaponAmmunition = true
 removeWeaponCharges = true
+-- Enable weapon evolution mechanic
+weaponEvolution = true
 timeToDecreaseFrags = 24 * 60 * 60
 whiteSkullTime = 15 * 60
 stairJumpExhaustion = 2000
