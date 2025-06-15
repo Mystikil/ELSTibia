@@ -75,6 +75,10 @@ GameState_t Game::getGameState() const { return gameState; }
 
 void Game::setWorldType(WorldType_t type) { worldType = type; }
 
+void Game::setAIDebug(bool value) { aiDebug = value; }
+
+bool Game::isAIDebug() const { return aiDebug; }
+
 void Game::setGameState(GameState_t newState)
 {
 	if (gameState == GAME_STATE_SHUTDOWN) {
@@ -5126,12 +5130,13 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 		return;
 	}
 
-       Database& db = Database::getInstance();
-       const std::string query = fmt::format(
-               "INSERT INTO `client_assertions` (`player_id`, `created_at`, `assert_line`, `assert_date`, `description`, `comment`) VALUES ({:d}, {:d}, {:s}, {:s}, {:s}, {:s})",
-               playerId, time(nullptr), db.escapeString(assertLine), db.escapeString(date), db.escapeString(description), db.escapeString(comment));
+	Database& db = Database::getInstance();
+	const std::string query = fmt::format(
+	    "INSERT INTO `client_assertions` (`player_id`, `created_at`, `assert_line`, `assert_date`, `description`, `comment`) VALUES ({:d}, {:d}, {:s}, {:s}, {:s}, {:s})",
+	    playerId, time(nullptr), db.escapeString(assertLine), db.escapeString(date), db.escapeString(description),
+	    db.escapeString(comment));
 
-       g_databaseTasks.addTask(query);
+	g_databaseTasks.addTask(query);
 }
 
 void Game::playerLeaveMarket(uint32_t playerId)
@@ -5728,12 +5733,12 @@ Guild_ptr Game::getGuild(uint32_t id) const
 	return it->second;
 }
 
-void Game::addGuild(Guild_ptr guild) 
+void Game::addGuild(Guild_ptr guild)
 {
-  if (!guild) {
-     return;
-   }
-   
+	if (!guild) {
+		return;
+	}
+
 	guilds[guild->getId()] = guild;
 }
 

@@ -97,6 +97,8 @@ public:
 
 	void setWorldType(WorldType_t type);
 	WorldType_t getWorldType() const { return worldType; }
+	void setAIDebug(bool value);
+	bool isAIDebug() const { return aiDebug; }
 
 	Cylinder* internalGetCylinder(Player* player, const Position& pos) const;
 	Thing* internalGetThing(Player* player, const Position& pos, int32_t index, uint32_t spriteId,
@@ -533,6 +535,7 @@ private:
 
 	GameState_t gameState = GAME_STATE_NORMAL;
 	WorldType_t worldType = WORLD_TYPE_PVP;
+	bool aiDebug = false;
 
 	ServiceManager* serviceManager = nullptr;
 

@@ -742,6 +742,17 @@ void Monster::onThink(uint32_t interval)
 {
 	Creature::onThink(interval);
 
+	if (g_game.isAIDebug()) {
+		std::cout << "[AI] " << getName() << " pos(" << position.x << ',' << position.y << ','
+		          << static_cast<int>(position.z) << ")";
+		if (attackedCreature) {
+			std::cout << " target: " << attackedCreature->getName();
+		} else {
+			std::cout << " target: none";
+		}
+		std::cout << std::endl;
+	}
+
 	if (mType->info.thinkEvent != -1) {
 		// onThink(self, interval)
 		if (!tfs::lua::reserveScriptEnv()) {

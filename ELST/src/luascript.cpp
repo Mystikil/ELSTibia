@@ -2400,6 +2400,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod(L, "Game", "getWorldType", LuaScriptInterface::luaGameGetWorldType);
 	registerMethod(L, "Game", "setWorldType", LuaScriptInterface::luaGameSetWorldType);
+	registerMethod(L, "Game", "isAIDebugEnabled", LuaScriptInterface::luaGameIsAIDebugEnabled);
+	registerMethod(L, "Game", "setAIDebug", LuaScriptInterface::luaGameSetAIDebug);
 
 	registerMethod(L, "Game", "getItemAttributeByName", LuaScriptInterface::luaGameGetItemAttributeByName);
 	registerMethod(L, "Game", "getReturnMessage", LuaScriptInterface::luaGameGetReturnMessage);
@@ -4610,15 +4612,15 @@ int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 {
 	// Game.loadMap(path)
 	const std::string& path = tfs::lua::getString(L, 1);
-       g_dispatcher.addTask([path]() {
-               try {
-                       g_game.loadMap(path, true);
-               } catch (const std::runtime_error& e) {
-                       std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Failed to load map: " << e.what() << '\n';
-               } catch (const std::exception& e) {
-                       std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Unexpected error: " << e.what() << '\n';
-               }
-       });
+	g_dispatcher.addTask([path]() {
+		try {
+			g_game.loadMap(path, true);
+		} catch (const std::runtime_error& e) {
+			std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Failed to load map: " << e.what() << '\n';
+		} catch (const std::exception& e) {
+			std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Unexpected error: " << e.what() << '\n';
+		}
+	});
 	return 0;
 }
 
@@ -4869,6 +4871,22 @@ int LuaScriptInterface::luaGameSetWorldType(lua_State* L)
 	// Game.setWorldType(type)
 	WorldType_t type = tfs::lua::getNumber<WorldType_t>(L, 1);
 	g_game.setWorldType(type);
+	tfs::lua::pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaGameIsAIDebugEnabled(lua_State* L)
+{
+	// Game.isAIDebugEnabled()
+	tfs::lua::pushBoolean(L, g_game.isAIDebug());
+	return 1;
+}
+
+int LuaScriptInterface::luaGameSetAIDebug(lua_State* L)
+{
+	// Game.setAIDebug(enabled)
+	bool enabled = tfs::lua::getBoolean(L, 1);
+	g_game.setAIDebug(enabled);
 	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
