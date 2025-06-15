@@ -1,0 +1,10 @@
+{
+  "name": "BossControlAndStrike",
+  "nodes": [
+    {"id": "root", "type": "selector", "children": ["attack", "idle"]},
+    {"id": "attack", "type": "sequence", "children": ["selectTarget", "useSkill"]},
+    {"id": "selectTarget", "type": "action", "action": "selectTarget"},
+    {"id": "useSkill", "type": "action", "action": "usePrimarySkill"},
+    {"id": "idle", "type": "action", "action": "wait"}
+  ]
+}

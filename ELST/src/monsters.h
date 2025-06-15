@@ -93,8 +93,30 @@ struct spellBlock_t
 
 struct voiceBlock_t
 {
-	std::string text;
-	bool yellText;
+        std::string text;
+        bool yellText;
+};
+
+struct behaviorsBlock_t
+{
+        std::string treeFile;
+        std::string fsmFile;
+};
+
+struct perceptionBlock_t
+{
+        uint32_t sightRange = 0;
+};
+
+struct threatBlock_t
+{
+        uint32_t memory = 0;
+};
+
+struct skillsBlock_t
+{
+        int32_t accuracy = 0;
+        int32_t evasion = 0;
 };
 
 struct BestiaryInfo
@@ -173,10 +195,16 @@ class MonsterType
 		bool hiddenHealth = false;
 		bool canWalkOnEnergy = true;
 		bool canWalkOnFire = true;
-		bool canWalkOnPoison = true;
+               bool canWalkOnPoison = true;
 
-		MonstersEvent_t eventType = MONSTERS_EVENT_NONE;
-	};
+               behaviorsBlock_t behaviors;
+               perceptionBlock_t perception;
+               threatBlock_t threat;
+               skillsBlock_t skills;
+               std::string aiProfile;
+
+               MonstersEvent_t eventType = MONSTERS_EVENT_NONE;
+       };
 
 public:
 	MonsterType() = default;

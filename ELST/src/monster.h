@@ -6,11 +6,13 @@
 
 #include "creature.h"
 #include "monsters.h"
+#include <memory>
 #include "position.h"
 
 class Item;
 class Spawn;
 class Tile;
+class MonsterAIController;
 
 using CreatureHashSet = std::unordered_set<Creature*>;
 using CreatureList = std::list<Creature*>;
@@ -27,7 +29,8 @@ enum TargetSearchType_t
 class Monster final : public Creature
 {
 public:
-	static Monster* createMonster(const std::string& name);
+       friend class MonsterAIController;
+       static Monster* createMonster(const std::string& name);
 
 	using Creature::onWalk;
 
@@ -144,8 +147,9 @@ private:
 	std::string name;
 	std::string nameDescription;
 
-	MonsterType* mType;
-	Spawn* spawn = nullptr;
+       MonsterType* mType;
+       Spawn* spawn = nullptr;
+       std::unique_ptr<MonsterAIController> aiController;
 
 	int64_t lastMeleeAttack = 0;
 
