@@ -33,9 +33,10 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/iomapserialize.cpp
 	${CMAKE_CURRENT_LIST_DIR}/iomarket.cpp
 	${CMAKE_CURRENT_LIST_DIR}/item.cpp
-	${CMAKE_CURRENT_LIST_DIR}/items.cpp
-	${CMAKE_CURRENT_LIST_DIR}/luascript.cpp
-	${CMAKE_CURRENT_LIST_DIR}/mailbox.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/items.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/luascript.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/pythonscript.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/mailbox.cpp
 	${CMAKE_CURRENT_LIST_DIR}/map.cpp
 	${CMAKE_CURRENT_LIST_DIR}/matrixarea.cpp
 	${CMAKE_CURRENT_LIST_DIR}/monster.cpp
@@ -119,8 +120,9 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/itemloader.h
 	${CMAKE_CURRENT_LIST_DIR}/items.h
 	${CMAKE_CURRENT_LIST_DIR}/lockfree.h
-	${CMAKE_CURRENT_LIST_DIR}/luascript.h
-	${CMAKE_CURRENT_LIST_DIR}/luavariant.h
+        ${CMAKE_CURRENT_LIST_DIR}/luascript.h
+        ${CMAKE_CURRENT_LIST_DIR}/pythonscript.h
+        ${CMAKE_CURRENT_LIST_DIR}/luavariant.h
 	${CMAKE_CURRENT_LIST_DIR}/mailbox.h
 	${CMAKE_CURRENT_LIST_DIR}/map.h
 	${CMAKE_CURRENT_LIST_DIR}/matrixarea.h
@@ -179,14 +181,19 @@ target_link_libraries(tfslib PRIVATE
 	OpenSSL::Crypto
 	pugixml::pugixml
 	ZLIB::ZLIB
-	${CMAKE_THREAD_LIBS_INIT}
-	${LUA_LIBRARIES}
-	${MYSQL_CLIENT_LIBS}
-	)
+        ${CMAKE_THREAD_LIBS_INIT}
+        ${LUA_LIBRARIES}
+        ${MYSQL_CLIENT_LIBS}
+        ${Python3_LIBRARIES}
+        )
 set_target_properties(tfslib PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
 
 if (APPLE)
-	target_link_libraries(tfslib PRIVATE Iconv::Iconv)
+        target_link_libraries(tfslib PRIVATE Iconv::Iconv)
+endif()
+
+if (Python3_FOUND)
+        target_compile_definitions(tfslib PRIVATE ENABLE_PYTHON)
 endif()
 
 if (HTTP)

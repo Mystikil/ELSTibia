@@ -662,12 +662,13 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-		case ATTR_SLEEPSTART: {
-			if (!propStream.skip(4)) {
-				return ATTR_READ_ERROR;
-			}
-			break;
-		}
+               case ATTR_SLEEPSTART: {
+                       size_t skipLen = propStream.size() >= sizeof(uint64_t) ? sizeof(uint64_t) : sizeof(uint32_t);
+                       if (!propStream.skip(skipLen)) {
+                               return ATTR_READ_ERROR;
+                       }
+                       break;
+               }
 
 		// Podium class
 		case ATTR_PODIUMOUTFIT: {
