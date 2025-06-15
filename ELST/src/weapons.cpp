@@ -421,13 +421,13 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Tile* tile) const
 
 void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 {
-	if (!player->hasFlag(PlayerFlag_NotGainSkill)) {
-		skills_t skillType;
-		uint32_t skillPoint;
-		if (getSkillType(player, item, skillType, skillPoint)) {
-			player->addSkillAdvance(skillType, skillPoint);
-		}
-	}
+        if (!player->hasFlag(PlayerFlag_NotGainSkill)) {
+                skills_t skillType;
+                uint32_t skillPoint;
+                if (getSkillType(player, item, skillType, skillPoint)) {
+                        player->addSkillAdvance(skillType, skillPoint);
+                }
+        }
 
 	uint32_t manaCost = getManaCost(player);
 	if (manaCost != 0) {
@@ -440,9 +440,29 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 		player->changeHealth(-static_cast<int32_t>(healthCost));
 	}
 
-	if (!player->hasFlag(PlayerFlag_HasInfiniteSoul) && soul > 0) {
-		player->changeSoul(-static_cast<int32_t>(soul));
-	}
+        if (!player->hasFlag(PlayerFlag_HasInfiniteSoul) && soul > 0) {
+                player->changeSoul(-static_cast<int32_t>(soul));
+        }
+
+        // increment weapon usage counter
+        int64_t useCount = 0;
+        if (const ItemAttributes::CustomAttribute* attr = item->getCustomAttribute("usecount")) {
+                useCount = attr->get<int64_t>();
+        }
+        ++useCount;
+        item->setCustomAttribute("usecount", useCount);
+
+        bool evolved = false;
+        if (const ItemAttributes::CustomAttribute* attr = item->getCustomAttribute("evolved")) {
+                evolved = attr->get<bool>();
+        }
+
+        if (!evolved && useCount >= 100) {
+                item->setIntAttr(ITEM_ATTRIBUTE_ATTACK, item->getAttack() + 3);
+                item->setCustomAttribute("evolved", true);
+                player->sendTextMessage(MESSAGE_INFO_DESCR,
+                                        fmt::format("Your {:s} has evolved and gained +3 attack!", item->getName()));
+        }
 
 	if (breakChance != 0 && uniform_random(1, 100) <= breakChance) {
 		player->sendSupplyUsed(item->getClientID());
