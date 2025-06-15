@@ -11,6 +11,7 @@
 #include "game.h"
 #include "spectators.h"
 #include "spells.h"
+#include "monsteraicontroller.h"
 
 extern Game g_game;
 extern Monsters g_monsters;
@@ -785,8 +786,9 @@ void Monster::onThink(uint32_t interval)
 	} else {
 		updateIdleStatus();
 
-		if (!isIdle) {
-			addEventWalk();
+                if (!isIdle) {
+                        addEventWalk();
+                       MonsterAIController::processInteractions(this);
 
 			if (isSummon()) {
 				if (!attackedCreature) {

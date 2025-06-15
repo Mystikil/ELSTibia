@@ -40,8 +40,9 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/map.cpp
 	${CMAKE_CURRENT_LIST_DIR}/matrixarea.cpp
 	${CMAKE_CURRENT_LIST_DIR}/monster.cpp
-	${CMAKE_CURRENT_LIST_DIR}/monsters.cpp
-	${CMAKE_CURRENT_LIST_DIR}/mounts.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/monsters.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/monsteraicontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/mounts.cpp
 	${CMAKE_CURRENT_LIST_DIR}/movement.cpp
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/npc.cpp
@@ -127,8 +128,9 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/map.h
 	${CMAKE_CURRENT_LIST_DIR}/matrixarea.h
 	${CMAKE_CURRENT_LIST_DIR}/monster.h
-	${CMAKE_CURRENT_LIST_DIR}/monsters.h
-	${CMAKE_CURRENT_LIST_DIR}/mounts.h
+        ${CMAKE_CURRENT_LIST_DIR}/monsters.h
+        ${CMAKE_CURRENT_LIST_DIR}/monsteraicontroller.h
+        ${CMAKE_CURRENT_LIST_DIR}/mounts.h
 	${CMAKE_CURRENT_LIST_DIR}/movement.h
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.h
 	${CMAKE_CURRENT_LIST_DIR}/npc.h
